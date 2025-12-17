@@ -22,6 +22,6 @@ struct ColourState {
 };
 
 void skc6812_led_Init();
-void skc6812_shine(const ColourState& state);
-void skc6812_push(const ColourState* state);
-void skc6812_blue_test();
+void skc6812_led_shine(const ColourState& state);
+void skc6812_led_push(const ColourState* state);
+void skc6812_led_blue_test();

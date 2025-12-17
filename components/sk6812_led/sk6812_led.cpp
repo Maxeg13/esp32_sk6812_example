@@ -52,12 +52,12 @@ static void set_t1l() {
 }
 
 static void add(uint8_t& x, uint8_t incr) {
-    if(x + incr > 255) x = 255;
+    if((int)x + (int)incr > 255) x = 255;
     else x+= incr;
 }
 
 static void minus(uint8_t& x, uint8_t decr) {
-    if(x - decr > x) x = 0;
+    if((int)x - (int)decr < 0) x = 0;
     else x -= decr;
 }
 
@@ -85,7 +85,7 @@ static void sk6812_led_task(void *pvParameters) {
             state.stepTo(*state.targetPtr);
         }
 
-        skc6812_shine(state);
+        skc6812_led_shine(state);
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
@@ -104,7 +104,7 @@ void ColourState::stepTo(const ColourState &targ) {
     else if(b > step)   minus(b, step);
 }
 
-void skc6812_shine(const ColourState& state) {
+void skc6812_led_shine(const ColourState& state) {
     static uint8_t bits[24]{};
     const uint8_t* colourPtrs[3] = {&state.g, &state.r, &state.b};
 
@@ -129,7 +129,7 @@ void skc6812_shine(const ColourState& state) {
     taskEXIT_CRITICAL(&led_spinlock);
 }
 
-void skc6812_push(const ColourState* state) {
+void skc6812_led_push(const ColourState* state) {
     xQueueSend(queue, &state, (TickType_t)0 );
 }
 
@@ -140,7 +140,7 @@ void skc6812_led_Init() {
     xTaskCreate(sk6812_led_task, "led task", 4096, NULL, 6, NULL);
 }
 
-void skc6812_blue_test() {
+void skc6812_led_blue_test() {
     int i = 0;
     //  green
     for( i=0; i<8; i++) {

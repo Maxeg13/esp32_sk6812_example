@@ -20,7 +20,7 @@ static bool timer_on_alarm_cb(gptimer_handle_t timer, const gptimer_alarm_event_
 {
     static const ColourState* targetPtr{state1Ptr};
 
-    skc6812_push(targetPtr);
+    skc6812_led_push(targetPtr);
     targetPtr = targetPtr->targetPtr;
 
     return true;
@@ -60,7 +60,7 @@ void app_main(void) {
 
 
     while (true) {
-//        skc6812_blue_test();
+//        skc6812_led_blue_test();
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
